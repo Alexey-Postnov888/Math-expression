@@ -7,86 +7,109 @@ namespace Solution
     {
         static void Main(string[] args)
         {
-            string input = GetInput().Replace(" ", String.Empty);
-            char[] availableOps = new [] { '+', '-', '*', '/', '(', ')'};
-
-            List<int> numbers = new List<int>();
-            List<char> operators = new List<char>();
-            string buffer = string.Empty;
-            for(int i = 0; i < input.Length; i++)
+            List<object> result = RPN(GetInput().Replace(" ", string.Empty));
+            string final = string.Empty;
+            foreach (var c in result)
             {
-                if (!char.IsDigit(input[i]))
-                {
-                    operators.Add(input[i]);
-                    buffer = SaveBuffer(numbers, buffer);
-                }
-                else
-                {
-                    buffer += input[i];
-                }
+                final += $"{c.ToString()} ";
             }
             
-            SaveBuffer(numbers, buffer);
-
-            // output
-            Console.Write("Ваши числа: " + String.Join(", ", numbers));
-            Console.WriteLine();
-            Console.Write("Операнды: " + String.Join(", ", operators));
-            Console.WriteLine();
-            Console.WriteLine("Значение вашего выражения: " + Calculations(operators, numbers).ToString());
-            
+            Console.WriteLine(final);
         }
-        static string SaveBuffer(List<int> numbers, string buffer)
-        {
-            if (!string.IsNullOrEmpty(buffer))
-            {
-                numbers.Add(int.Parse(buffer));
-            }
-            
-            return string.Empty;
-        }
-
-        static int Calculations(List<char> operators, List<int> numbers)
-        {
-            for (int i = 0; i < operators.Count; i++)
-            {
-                char op = operators[i];
-                
-                if ((op == '*') || (op == '/'))
-                {
-                    int result = (op == '*') ? numbers[i] * numbers[i + 1] : numbers[i] / numbers[i + 1];
-
-                    Remove(numbers, operators, i, result);
-                }
-            }
-
-            for (int i = 0; i < operators.Count; i++)
-            {
-                char op = operators[i];
-                
-                if ((op == '+') || (op == '-'))
-                {
-                    int result = (op == '+') ? numbers[i] + numbers[i + 1] : numbers[i] - numbers[i + 1];
-
-                    Remove(numbers, operators, i, result);
-                }
-            }
-
-            return numbers[0];
-        }
-
-        public static void Remove(List<int> numbers, List<char> operators, int i, int result)
-        {
-            numbers[i] = result;
-            numbers.RemoveAt(i + 1);
-            operators.RemoveAt(i);
-            i--;
-        }
-
+        
         static string GetInput()
         {
             Console.WriteLine("Напишите ваше выражение");
             return Console.ReadLine();
+        }
+ 
+        public static int GetPriority(char op)
+        {
+            switch (op)
+            {
+                case '(': return 0;
+                case ')': return 0;
+                case '+': return 1;
+                case '-': return 1;
+                case '*': return 2;
+                case '/': return 2;
+                default: return 3;
+            }
+        }
+
+        public static bool IsOperator(char c)
+        {
+            bool check_operator;
+            string string_operators = "+-*/()";
+            return check_operator = (string_operators.Contains(Convert.ToString(c))) ? true : false;
+        }
+
+        public static List<object> RPN(string input)
+        {
+            List<object> rpn_output = new List<object>();
+            Stack<char> operators = new Stack<char>();
+            string number = string.Empty;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (char.IsDigit(input[i]))
+                {
+                    number += input[i];
+                }
+
+                if (IsOperator(input[i]))
+                {
+                    rpn_output.Add(number);
+                    number = string.Empty;
+                    if (input[i] == '(')
+                    {
+                        operators.Push(input[i]);
+                    }
+                    else if (input[i] == ')')
+                    {
+                        while (operators.Peek() != '(')
+                        {
+                            rpn_output.Add(operators.Peek());
+                            operators.Pop();
+                        }
+                        operators.Pop();
+                    }
+                    else
+                    {
+                        if (operators.Count > 0)
+                        {
+                            if (GetPriority(input[i]) <= GetPriority(operators.Peek()))
+                            {
+                                rpn_output.Add(operators.Peek());
+                                operators.Pop();
+                            }
+                            
+                            operators.Push(input[i]);
+                        }
+                        else
+                        {
+                            operators.Push(input[i]);
+                        }
+                    }
+                }
+            }
+
+            rpn_output.Add(number);
+
+            while (operators.Count != 0)
+            {
+                rpn_output.Add(operators.Peek());
+                operators.Pop();
+            }
+
+            while (rpn_output.Contains(string.Empty)) rpn_output.Remove(string.Empty);
+            return rpn_output;
+        }
+
+        public static int Calculation()
+        {
+            int result = 0;
+            return result;
         }
     }
 }
