@@ -14,12 +14,15 @@ namespace Solution
                 final += $"{c.ToString()} ";
             }
             
-            Console.WriteLine(final);
+            Console.WriteLine($"Ваше выражение в ОПЗ: {string.Join(" ", result)}");
+            Console.WriteLine($"Числа в вашем выражении: {string.Join(", ", ListOfNumbers(result))}");
+            Console.WriteLine($"Операторы в вашем выражении: {string.Join(", ", ListOfOperators(result))}");
+            Console.WriteLine($"Значение вашего выражения: {Calculation(result)}");
         }
-        
+
         static string GetInput()
         {
-            Console.WriteLine("Напишите ваше выражение");
+            Console.Write("Ваше выражение: ");
             return Console.ReadLine();
         }
  
@@ -37,7 +40,7 @@ namespace Solution
             }
         }
 
-        public static bool IsOperator(char c)
+        public static bool IsOperator(string c)
         {
             bool check_operator;
             string string_operators = "+-*/()";
@@ -57,7 +60,7 @@ namespace Solution
                     number += input[i];
                 }
 
-                if (IsOperator(input[i]))
+                if (IsOperator(input[i].ToString()))
                 {
                     rpn_output.Add(number);
                     number = string.Empty;
@@ -106,10 +109,63 @@ namespace Solution
             return rpn_output;
         }
 
-        public static int Calculation()
+        public static List<int> ListOfNumbers(List<object> rpn_output)
         {
+            List<int> numbers = new List<int>();
+
+            for (int i = 0; i < rpn_output.Count; i++)
+            {
+                if (!IsOperator(rpn_output[i].ToString()))
+                {
+                    numbers.Add(int.Parse(rpn_output[i].ToString()));
+                }
+            }
+
+            return numbers;
+        }
+        
+        public static List<char> ListOfOperators(List<object> rpn_output)
+        {
+            List<char> operators = new List<char>();
+
+            for (int i = 0; i < rpn_output.Count; i++)
+            {
+                if (IsOperator(rpn_output[i].ToString()))
+                {
+                    operators.Add(Convert.ToChar(rpn_output[i]));
+                }
+            }
+
+            return operators;
+        }
+
+        public static int Calculation(List<object> rpn_caclc)
+        {
+            Stack<int> temp_calc = new Stack<int>();
             int result = 0;
-            return result;
+        
+            for (int i = 0; i < rpn_caclc.Count; i++)
+            {
+                if (!IsOperator(rpn_caclc[i].ToString()))
+                {
+                    temp_calc.Push(int.Parse(rpn_caclc[i].ToString()));
+                }
+                else
+                {
+                    int first = temp_calc.Pop();
+                    int second = temp_calc.Pop();
+        
+                    switch (Convert.ToChar(rpn_caclc[i]))
+                    {
+                        case '+': result = first + second; break;
+                        case '-': result = second - first; break;
+                        case '*': result = first * second; break;
+                        case '/': result = second / first; break;
+                    }
+                    temp_calc.Push(result);
+                }
+            }
+            return temp_calc.Peek();
         }
     }
 }
