@@ -8,11 +8,6 @@ namespace Solution
         static void Main(string[] args)
         {
             List<object> result = RPN(GetInput().Replace(" ", string.Empty));
-            string final = string.Empty;
-            foreach (var c in result)
-            {
-                final += $"{c.ToString()} ";
-            }
             
             Console.WriteLine($"Ваше выражение в ОПЗ: {string.Join(" ", result)}");
             Console.WriteLine($"Числа в вашем выражении: {string.Join(", ", ListOfNumbers(result))}");
