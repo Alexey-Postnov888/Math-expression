@@ -25,8 +25,17 @@ namespace RpnWpfApp
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string input = txtboxInput.Text;
-            double result = new RpnCalculator(input).Result;
-            lblResult.Content = result;
+            if (txtboxVarX.Text == string.Empty)
+            {
+                double result = new RpnCalculator(input).Result;
+                lblResult.Content = result;
+            }
+            else
+            {
+                int varX = int.Parse(txtboxVarX.Text);
+                double result = new RpnCalculator(input, varX).Result;
+                lblResult.Content = result;
+            }
         }
     }
 }

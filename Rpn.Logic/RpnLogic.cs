@@ -1,33 +1,32 @@
-﻿
-using System.ComponentModel;
-
-namespace RpnLogic
+﻿namespace RpnLogic
 {
-    class Token
-    {
-
-    }
+    class Token;
 
     class Number : Token
     {
         public double Symbol { get; }
+        public char SymbolX { get; }
 
         public Number(double num)
         {
             Symbol = num;
         }
+        
+        public Number(char symbolX)
+        {
+            SymbolX = symbolX;
+        }
+
+        public static bool CheckX(char symbolX)
+        {
+            return symbolX is 'x' or 'X' or 'х' or 'Х';
+        }
     }
 
-    class Operation : Token
+    class Operation(char symbol) : Token
     {
-        public char Symbol { get; }
-        public int Priority { get; }
-
-        public Operation(char symbol)
-        {
-            Symbol = symbol;
-            Priority = GetPriority(symbol);
-        }
+        public char Symbol { get; } = symbol;
+        public int Priority { get; } = GetPriority(symbol);
 
         private static int GetPriority(char symbol)
         {
@@ -44,26 +43,23 @@ namespace RpnLogic
         }
     }
 
-    class Paranthesis : Token
+    class Paranthesis(char symbol) : Token
     {
-        public char Symbol { get; }
-        public bool isClosing { get; }
-
-        public Paranthesis(char symbol)
-        {
-            Symbol = symbol;
-            isClosing = symbol == ')';
-        }
+        public bool IsClosing { get; } = symbol == ')';
     }
 
     public class RpnCalculator
     {
-        private List<Token> RPN;
-        public double Result;
+        public readonly double Result;
         public RpnCalculator(string expression)
         {
-            RPN = toRPN(Tokenize(expression));
-            Result = Calculate(RPN);
+            List<Token> rpn = ToRpn(Tokenize(expression));
+            Result = CalculateWithoutX(rpn);
+        }
+        public RpnCalculator(string expression, int varX)
+        {
+            List<Token> rpn = ToRpn(Tokenize(expression));
+            Result = CalculateWithX(rpn, varX);
         }
         private List<Token> Tokenize(string input)
         {
@@ -79,7 +75,6 @@ namespace RpnLogic
                 {
                     number += ",";
                 }
-
                 else if (c == '+' || c == '-' || c == '*' || c == '/')
                 {
                     if (number != string.Empty)
@@ -98,6 +93,10 @@ namespace RpnLogic
                     }
                     tokens.Add(new Paranthesis(c));
                 }
+                else if (Number.CheckX(c))
+                {
+                    tokens.Add(new Number(c));
+                }
             }
 
             if (number != string.Empty)
@@ -108,15 +107,15 @@ namespace RpnLogic
             return tokens;
         }
 
-        private List<Token> toRPN(List<Token> tokens)
+
+        private static List<Token> ToRpn(List<Token> tokens)
         {
             List<Token> rpnOutput = new List<Token>();
             Stack<Token> operators = new Stack<Token>();
-            string number = string.Empty;
 
             foreach (Token token in tokens)
             {
-                if (operators.Count == 0 && !(token is Number))
+                if (operators.Count == 0 && token is not Number)
                 {
                     operators.Push(token);
                     continue;
@@ -139,18 +138,18 @@ namespace RpnLogic
                     }
                     else if (first.Priority <= second.Priority)
                     {
-                        while (operators.Count > 0 && !(token is Paranthesis))
+                        while (operators.Count > 0 && token is not Paranthesis)
                         {
                             rpnOutput.Add(operators.Pop());
                         }
                         operators.Push(token);
                     }
                 }
-                else if (token is Paranthesis)
+                else if (token is Paranthesis paranthesis)
                 {
-                    if (((Paranthesis)token).isClosing)
+                    if (paranthesis.IsClosing)
                     {
-                        while (!(operators.Peek() is Paranthesis))
+                        while (operators.Peek() is not Paranthesis)
                         {
                             rpnOutput.Add(operators.Pop());
                         }
@@ -159,12 +158,12 @@ namespace RpnLogic
                     }
                     else
                     {
-                        operators.Push(token);
+                        operators.Push(paranthesis);
                     }
                 }
-                else if (token is Number)
+                else if (token is Number num)
                 {
-                    rpnOutput.Add(token);
+                    rpnOutput.Add(num);
                 }
             }
 
@@ -174,35 +173,73 @@ namespace RpnLogic
             }
             return rpnOutput;
         }
-        private double Calculate(List<Token> rpnCalc)
+        private static double CalculateOperation(double first, double second, char operation)
         {
-            Stack<double> tempCalc = new Stack<double>();
             double result = 0;
 
-            for (int i = 0; i < rpnCalc.Count; i++)
+            switch (operation)
             {
-                if (rpnCalc[i] is Number num)
+                case '+': result = first + second; break;
+                case '-': result = second - first; break;
+                case '*': result = first * second; break;
+                case '/': result = second / first; break;
+            }
+
+            return result;
+        }
+
+        private static double CalculateWithoutX(List<Token> rpnCalc)
+        {
+            Stack<double> tempCalc = new Stack<double>();
+
+            foreach (Token token in rpnCalc)
+            {
+                if (token is Number num)
                 {
                     tempCalc.Push(num.Symbol);
                 }
-                else
+                else if (token is Operation)
                 {
                     double first = tempCalc.Pop();
                     double second = tempCalc.Pop();
-
-                    var op = (Operation)rpnCalc[i];
-
-                    switch (op.Symbol)
-                    {
-                        case '+': result = first + second; break;
-                        case '-': result = second - first; break;
-                        case '*': result = first * second; break;
-                        case '/': result = second / first; break;
-                    }
+                    var op = (Operation)token;
+                    double result = CalculateOperation(first, second, op.Symbol);
                     tempCalc.Push(result);
                 }
             }
+
             return tempCalc.Peek();
         }
+
+        private static double CalculateWithX(List<Token> rpnCalc, int varX)
+        {
+            Stack<double> tempCalc = new Stack<double>();
+
+            foreach (Token token in rpnCalc)
+            {
+                if (token is Number num)
+                {
+                    if (Number.CheckX(num.SymbolX))
+                    {
+                        tempCalc.Push(varX);
+                    }
+                    else
+                    {
+                        tempCalc.Push(num.Symbol);
+                    }
+                }
+                else if (token is Operation)
+                {
+                    double first = tempCalc.Pop();
+                    double second = tempCalc.Pop();
+                    var op = (Operation)token;
+                    double result = CalculateOperation(first, second, op.Symbol);
+                    tempCalc.Push(result);
+                }
+            }
+
+            return tempCalc.Peek();
+        }
+
     }
 }

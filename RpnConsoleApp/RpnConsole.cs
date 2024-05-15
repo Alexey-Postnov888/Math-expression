@@ -13,10 +13,16 @@ namespace RpnConsoleApp
                 Console.Write("Ваше выражение: ");
                 return Console.ReadLine();
             }
+            static string GetVarX()
+            {
+                Console.Write("Ваше значение X: ");
+                return Console.ReadLine();
+            }
             static void Main(string[] args)
             {
                 string input = GetInput().Replace(" ", string.Empty);
-                RpnCalculator rpn = new RpnCalculator(input);
+                int varX = int.Parse(GetVarX());
+                RpnCalculator rpn = new RpnCalculator(input, varX);
                 double result = rpn.Result;
 
                 // Console.WriteLine($"Ваше выражение в ОПЗ: {string.Join(" ", toRPN(tokens))}"); //// to do normal output
