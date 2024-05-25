@@ -1,17 +1,14 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using RpnLogic;
 
 namespace RpnWpfApp
 {
+
+    class Point(double x, double y)
+    {
+        public readonly double X = x;
+        public readonly double Y = y;
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -24,18 +21,33 @@ namespace RpnWpfApp
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            CanvasGraph.Children.Clear();
+            DrawCanvas();
+        }
+
+        private void DrawCanvas()
+        {
             string input = txtboxInput.Text;
-            if (txtboxVarX.Text == string.Empty)
+            double start = double.Parse(txtboxStart.Text);
+            double end = double.Parse(txtboxEnd.Text);
+            double scale = double.Parse(txtboxScale.Text);
+            double step = double.Parse(txtboxStep.Text);
+
+            var canvasGraph = CanvasGraph;
+            
+            var drawChart = new DrawChart(canvasGraph, start, end, step, scale);
+            drawChart.DrawAxis();
+
+            var calculator = new RpnCalculator(input);
+            List<Point> points = new List<Point>();
+            
+            for (double x = start; x <= end; x += step)
             {
-                double result = new RpnCalculator(input).Result;
-                lblResult.Content = result;
+                var y = calculator.CalculateWithX(calculator.Rpn, x);
+                points.Add(new Point(x, y));
             }
-            else
-            {
-                int varX = int.Parse(txtboxVarX.Text);
-                double result = new RpnCalculator(input, varX).Result;
-                lblResult.Content = result;
-            }
+            
+            drawChart.DrawGraph(points);
         }
     }
 }

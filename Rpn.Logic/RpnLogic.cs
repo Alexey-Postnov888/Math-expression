@@ -1,6 +1,6 @@
 ﻿namespace RpnLogic
 {
-    class Token;
+    public class Token;
 
     class Number : Token
     {
@@ -51,12 +51,13 @@
     public class RpnCalculator
     {
         public readonly double Result;
+        public readonly List<Token> Rpn;
         public RpnCalculator(string expression)
         {
-            List<Token> rpn = ToRpn(Tokenize(expression));
-            Result = CalculateWithoutX(rpn);
+            Rpn = ToRpn(Tokenize(expression));
+            Result = CalculateWithoutX(Rpn);
         }
-        public RpnCalculator(string expression, int varX)
+        public RpnCalculator(string expression, double varX)
         {
             List<Token> rpn = ToRpn(Tokenize(expression));
             Result = CalculateWithX(rpn, varX);
@@ -211,7 +212,7 @@
             return tempCalc.Peek();
         }
 
-        private static double CalculateWithX(List<Token> rpnCalc, int varX)
+        public double CalculateWithX(List<Token> rpnCalc, double varX)
         {
             Stack<double> tempCalc = new Stack<double>();
 

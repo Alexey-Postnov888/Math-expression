@@ -24,8 +24,7 @@ namespace RpnConsoleApp
                 int varX = int.Parse(GetVarX());
                 RpnCalculator rpn = new RpnCalculator(input, varX);
                 double result = rpn.Result;
-
-                // Console.WriteLine($"Ваше выражение в ОПЗ: {string.Join(" ", toRPN(tokens))}"); //// to do normal output
+                
                 Console.WriteLine($"Результат: {result}");
 
             }
