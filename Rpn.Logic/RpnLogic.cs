@@ -220,14 +220,7 @@
             {
                 if (token is Number num)
                 {
-                    if (Number.CheckX(num.SymbolX))
-                    {
-                        tempCalc.Push(varX);
-                    }
-                    else
-                    {
-                        tempCalc.Push(num.Symbol);
-                    }
+                    tempCalc.Push(Number.CheckX(num.SymbolX) ? varX : num.Symbol);
                 }
                 else if (token is Operation)
                 {
