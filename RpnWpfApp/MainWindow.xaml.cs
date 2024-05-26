@@ -40,15 +40,23 @@ namespace RpnWpfApp
             drawChart.DrawAxis();
 
             var calculator = new RpnCalculator(input);
-            List<Point> points = new List<Point>();
+            List<Point> pointsChart = new List<Point>();
+            
+            for (double x = start; x <= end; x += step/50)
+            {
+                var y = calculator.CalculateWithX(calculator.Rpn, x);
+                pointsChart.Add(new Point(x, y));
+            }
+            
+            List<Point> pointsScale = new List<Point>();
             
             for (double x = start; x <= end; x += step)
             {
                 var y = calculator.CalculateWithX(calculator.Rpn, x);
-                points.Add(new Point(x, y));
+                pointsScale.Add(new Point(x, y));
             }
             
-            drawChart.DrawGraph(points);
+            drawChart.DrawGraph(pointsChart, pointsScale);
         }
     }
 }

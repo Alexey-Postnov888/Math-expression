@@ -39,7 +39,7 @@ class DrawChart
     {
         _canvas = canvas;
         _xAxisStart = new Point((int)(_canvas.ActualWidth / 2), 0);
-        _xAxisEnd = new Point((int)_canvas.ActualWidth / 2, (int)(_canvas.ActualHeight));
+        _xAxisEnd = new Point((int)_canvas.ActualWidth / 2, (int)_canvas.ActualHeight);
 
         _yAxisStart = new Point(0, (int)( _canvas.ActualHeight / 2));
         _yAxisEnd = new Point((int)_canvas.ActualWidth, (int)(_canvas.ActualHeight / 2));
@@ -76,14 +76,17 @@ class DrawChart
         _canvas.Children.Add(line);
     }
 
-    public void DrawGraph(List<Point> points)
+    public void DrawGraph(List<Point> pointsChart, List<Point> pointsScale)
     {
-        for (int i = 0; i < points.Count - 1; i++)
+        for (int i = 0; i < pointsChart.Count - 1; i++)
         {
-            DrawLine(points[i].ToUiCoordinates(_canvas, _scale), points[i+1].ToUiCoordinates(_canvas, _scale),  Brushes.Red);
-            DrawPoint(points[i].ToUiCoordinates(_canvas, _scale), Brushes.DarkRed);
+            DrawLine(pointsChart[i].ToUiCoordinates(_canvas, _scale), pointsChart[i+1].ToUiCoordinates(_canvas, _scale),  Brushes.Red);
         }
-        DrawPoint(points[^1].ToUiCoordinates(_canvas, _scale), Brushes.DarkRed);
+        for (int i = 0; i < pointsScale.Count - 1; i++)
+        {
+            DrawPoint(pointsScale[i].ToUiCoordinates(_canvas, _scale), Brushes.DarkRed);
+        }
+        DrawPoint(pointsScale[^1].ToUiCoordinates(_canvas, _scale), Brushes.DarkRed);
     }
 
     private void DrawXAxisSegments()
