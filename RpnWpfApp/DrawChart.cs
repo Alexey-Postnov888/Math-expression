@@ -26,7 +26,7 @@ class DrawChart
 {
     private readonly Canvas _canvas;
     private readonly Brush _defaultStroke = Brushes.Black;
-    private readonly int _scaleLength = 5;
+    private readonly double _scaleLength = 3.6;
 
     private readonly Point _xAxisStart, _xAxisEnd, _yAxisStart, _yAxisEnd;
 
@@ -90,9 +90,12 @@ class DrawChart
     {
         for (double x = _xStart; x <= _xEnd; x += _step)
         {
+            if (x == 0) continue;
+            
             var point = new Point(x, 0).ToUiCoordinates(_canvas, _scale);
             DrawLine(new Point(point.X, _canvas.ActualHeight / 2 - _scaleLength / 2), 
                 new Point(point.X, _canvas.ActualHeight / 2 + _scaleLength / 2), _defaultStroke);
+            DrawText(new Point(point.X, _canvas.ActualHeight / 2 + _scaleLength), x.ToString("F2"), true);
         }
     }
     
@@ -100,9 +103,12 @@ class DrawChart
     {
         for (double y = _xStart; y <= _xEnd; y += _step)
         {
+            if (y == 0) continue;
+            
             var point = new Point(0, y).ToUiCoordinates(_canvas, _scale);
             DrawLine(new Point(_canvas.ActualWidth / 2 - _scaleLength / 2, point.Y),
                 new Point(_canvas.ActualWidth / 2 + _scaleLength / 2, point.Y), _defaultStroke);
+            DrawText(new Point(_canvas.ActualWidth / 2 + _scaleLength, point.Y), y.ToString("F2"), false);
         }
     }
     
@@ -124,5 +130,31 @@ class DrawChart
         Canvas.SetTop(ellipse, point.Y - size / 2);
 
         _canvas.Children.Add(ellipse);
+    }
+    
+    private void DrawText(Point point, string text, bool isXAxis)
+    {
+        TextBlock textBlock = new TextBlock()
+        {
+            Visibility = Visibility.Visible,
+            Text = text,
+            FontSize = 5
+        };
+        
+        textBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        Size textSize = textBlock.DesiredSize;
+        
+        if (isXAxis)
+        {
+            Canvas.SetLeft(textBlock, point.X - textSize.Width / 2);
+            Canvas.SetTop(textBlock, point.Y);
+        }
+        else
+        {
+            Canvas.SetLeft(textBlock, point.X);
+            Canvas.SetTop(textBlock, point.Y - textSize.Height / 2);
+        }
+
+        _canvas.Children.Add(textBlock);
     }
 }

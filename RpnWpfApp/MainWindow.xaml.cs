@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using RpnLogic;
 
 namespace RpnWpfApp
@@ -30,7 +31,7 @@ namespace RpnWpfApp
             string input = txtboxInput.Text;
             double start = double.Parse(txtboxStart.Text);
             double end = double.Parse(txtboxEnd.Text);
-            double scale = double.Parse(txtboxScale.Text);
+            double scale = double.Parse(txtboxScale.Text, NumberStyles.Any, CultureInfo.InvariantCulture);
             double step = double.Parse(txtboxStep.Text);
 
             var canvasGraph = CanvasGraph;
