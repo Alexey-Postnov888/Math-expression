@@ -36,8 +36,8 @@ namespace RpnWpfApp
 
             var canvasGraph = CanvasGraph;
             
-            var drawChart = new DrawChart(canvasGraph, start, end, step, scale);
-            drawChart.DrawAxis();
+            var chartDrawer = new ChartDrawer(canvasGraph, start, end, step, scale);
+            chartDrawer.DrawAxis();
 
             var calculator = new RpnCalculator(input);
             List<Point> pointsChart = new List<Point>();
@@ -56,7 +56,7 @@ namespace RpnWpfApp
                 pointsScale.Add(new Point(x, y));
             }
             
-            drawChart.DrawGraph(pointsChart, pointsScale);
+            chartDrawer.DrawGraph(pointsChart, pointsScale);
         }
     }
 }

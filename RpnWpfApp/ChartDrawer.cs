@@ -22,7 +22,7 @@ static class PointExtensions
     }
 }
 
-class DrawChart
+class ChartDrawer
 {
     private readonly Canvas _canvas;
     private readonly Brush _defaultStroke = Brushes.Black;
@@ -35,7 +35,7 @@ class DrawChart
     private readonly double _step;
     private readonly double _scale;
 
-    public DrawChart(Canvas canvas, double xStart, double xEnd, double step, double scale)
+    public ChartDrawer(Canvas canvas, double xStart, double xEnd, double step, double scale)
     {
         _canvas = canvas;
         _xAxisStart = new Point((int)(_canvas.ActualWidth / 2), 0);
