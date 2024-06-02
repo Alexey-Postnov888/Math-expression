@@ -22,10 +22,10 @@ namespace RpnConsoleApp
             {
                 string input = GetInput().Replace(" ", string.Empty);
                 int varX = int.Parse(GetVarX());
-                RpnCalculator rpn = new RpnCalculator(input, varX);
+                /*RpnCalculator rpn = new RpnCalculator(input, varX);
                 double result = rpn.Result;
                 
-                Console.WriteLine($"Результат: {result}");
+                Console.WriteLine($"Результат: {result}");*/
 
             }
         }

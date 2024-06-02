@@ -44,7 +44,7 @@ namespace RpnWpfApp
             
             for (double x = start; x <= end; x += step/50)
             {
-                var y = calculator.CalculateWithX(calculator.Rpn, x);
+                var y = calculator.CalculateRpn(x);
                 pointsChart.Add(new Point(x, y));
             }
             
@@ -52,7 +52,7 @@ namespace RpnWpfApp
             
             for (double x = start; x <= end; x += step)
             {
-                var y = calculator.CalculateWithX(calculator.Rpn, x);
+                var y = calculator.CalculateRpn(x);
                 pointsScale.Add(new Point(x, y));
             }
             
