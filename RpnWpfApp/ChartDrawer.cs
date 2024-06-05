@@ -34,7 +34,7 @@ class ChartDrawer
     private readonly double _xEnd;
     private readonly double _step;
     private readonly double _scale;
-
+    
     public ChartDrawer(Canvas canvas, double xStart, double xEnd, double step, double scale)
     {
         _canvas = canvas;
@@ -62,7 +62,7 @@ class ChartDrawer
     {
         stroke ??= _defaultStroke;
         
-        Line line = new Line()
+        Line line = new Line
         {
             Visibility = Visibility.Visible,
             StrokeThickness = thickness,

@@ -49,7 +49,7 @@ class Minus : Operation
 class Multiply : Operation
 {
     public override string Name => "*";
-    public override int Priority => 1;
+    public override int Priority => 2;
     public override int ArgsCount => 2;
     public override bool IsFunction => false;
     public override Number Execute(params Number[] numbers)
@@ -64,7 +64,7 @@ class Multiply : Operation
 class Devision : Operation
 {
     public override string Name => "/";
-    public override int Priority => 1;
+    public override int Priority => 2;
     public override int ArgsCount => 2;
     public override bool IsFunction => false;
     public override Number Execute(params Number[] numbers)
@@ -79,7 +79,7 @@ class Devision : Operation
 class Sin : Operation
 {
     public override string Name => "sin";
-    public override int Priority => 1;
+    public override int Priority => 3;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -93,7 +93,7 @@ class Sin : Operation
 class Cos : Operation
 {
     public override string Name => "cos";
-    public override int Priority => 1;
+    public override int Priority => 3;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -107,7 +107,7 @@ class Cos : Operation
 class Tg : Operation
 {
     public override string Name => "tg";
-    public override int Priority => 1;
+    public override int Priority => 3;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -121,7 +121,7 @@ class Tg : Operation
 class Ctg : Operation
 {
     public override string Name => "ctg";
-    public override int Priority => 1;
+    public override int Priority => 3;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -135,7 +135,7 @@ class Ctg : Operation
 class log : Operation
 {
     public override string Name => "log";
-    public override int Priority => 1;
+    public override int Priority => 3;
     public override int ArgsCount => 2;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -150,7 +150,7 @@ class log : Operation
 class Power : Operation
 {
     public override string Name => "^";
-    public override int Priority => 1;
+    public override int Priority => 3;
     public override int ArgsCount => 2;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -165,7 +165,7 @@ class Power : Operation
 class Sqrt : Operation
 {
     public override string Name => "sqrt";
-    public override int Priority => 1;
+    public override int Priority => 3;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -179,7 +179,7 @@ class Sqrt : Operation
 class Rt : Operation
 {
     public override string Name => "rt";
-    public override int Priority => 1;
+    public override int Priority => 3;
     public override int ArgsCount => 2;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
