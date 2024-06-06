@@ -54,14 +54,7 @@ namespace RpnLogic
                         token = string.Empty;
                     }
 
-                    if (c == '(' || c == ')')
-                    {
-                        tokens.Add(TokenCreator.Create(c, _varNames));
-                    }
-                    else
-                    {
-                        tokens.Add(TokenCreator.Create(c.ToString()));
-                    }
+                    tokens.Add(TokenCreator.Create(c, _varNames));
                 }
             }
 

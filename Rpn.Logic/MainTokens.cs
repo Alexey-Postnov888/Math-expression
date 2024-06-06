@@ -72,4 +72,3 @@ class VarX : Token
         return Symbol.ToString();
     }
 }
-    

@@ -119,7 +119,7 @@ class ChartDrawer
     {
         stroke ??= _defaultStroke;
         
-        Ellipse ellipse = new Ellipse()
+        Ellipse ellipse = new Ellipse
         {
             Visibility = Visibility.Visible,
             Stroke = stroke,

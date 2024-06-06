@@ -79,7 +79,7 @@ class Devision : Operation
 class Sin : Operation
 {
     public override string Name => "sin";
-    public override int Priority => 3;
+    public override int Priority => 4;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -93,7 +93,7 @@ class Sin : Operation
 class Cos : Operation
 {
     public override string Name => "cos";
-    public override int Priority => 3;
+    public override int Priority => 4;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -107,7 +107,7 @@ class Cos : Operation
 class Tg : Operation
 {
     public override string Name => "tg";
-    public override int Priority => 3;
+    public override int Priority => 4;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -121,7 +121,7 @@ class Tg : Operation
 class Ctg : Operation
 {
     public override string Name => "ctg";
-    public override int Priority => 3;
+    public override int Priority => 4;
     public override int ArgsCount => 1;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -135,7 +135,7 @@ class Ctg : Operation
 class log : Operation
 {
     public override string Name => "log";
-    public override int Priority => 3;
+    public override int Priority => 4;
     public override int ArgsCount => 2;
     public override bool IsFunction => true;
     public override Number Execute(params Number[] numbers)
@@ -143,7 +143,7 @@ class log : Operation
         var num1 = numbers[0];
         var num2 = numbers[1];
 
-        return new Number(Math.Log(num1.Symbol, num2.Symbol));
+        return new Number(Math.Log(num2.Symbol, num1.Symbol));
     }
 }
 
